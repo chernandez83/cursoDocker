@@ -1,0 +1,15 @@
+#!/bin/bash
+# ejecutar en segundo plano en el puertoexterno:puertointerno
+sudo docker container run -d -p 81:80 nginx
+sudo docker container ls
+curl localhost:81
+
+sudo docker container run -d -p 8080:80 nginx
+sudo docker container ls
+sudo docker container port 1f68776a8d7c
+curl localhost:8080
+
+# puerto aleaatorio
+sudo docker container run -d -P nginx
+sudo docker container ls
+curl localhost:32768

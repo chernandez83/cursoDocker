@@ -1,0 +1,18 @@
+#!/bin/bash
+sudo docker container run -dit ubuntu
+sudo docker container ls
+
+sudo docker exec -it 17a786164896 bash
+touch data.txt
+exit
+
+sudo docker container commit 17a786164896 ubuntu-data
+sudo docker image ls
+
+sudo docker container run -dit ubuntu-data
+sudo docker container ls
+sudo docker exec -it e45ae9338749 bash
+
+sudo docker container stop $(sudo docker container ls -q)
+sudo docker container prune
+sudo docker image ls

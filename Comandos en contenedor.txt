@@ -1,0 +1,28 @@
+#!/bin/bash
+# correr contenedores en segundo plano
+sudo docker container run -itd ubuntu
+sudo docker container run -d nginx
+sudo docker container ls
+
+# entra al contenedor pero se apaga al dar exit
+sudo docker container attach 0ce1313c0824
+
+# correr comandos en el contenedor
+sudo docker exec contenedor comando
+sudo docker exec e0d56614429c ls
+
+# correr comandos en el contenedor manteniendo la terminal
+# exit no lo termina
+sudo docker exec -it e0d56614429c bash
+
+# ver procesos corriendo en el contenedor
+sudo docker container top e0d56614429c
+
+sudo docker container stop b45c0fd4594d
+sudo docker container stop ab03d3dd64f1
+
+sudo docker container ls -q
+sudo docker container stop $(sudo docker container ls -q)
+
+# quitar todos los contenedores detenidos
+sudo docker container prune

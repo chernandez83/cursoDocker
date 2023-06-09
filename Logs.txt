@@ -1,0 +1,9 @@
+#!/bin/bash
+sudo docker container run fernando93d/hello
+
+sudo docker container logs 0f68057e10be
+
+sudo docker image pull mysql
+sudo docker container run -d mysql
+sudo docker container ls -a
+sudo docker container logs 41884a74f05f

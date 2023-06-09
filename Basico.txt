@@ -1,0 +1,53 @@
+#!/bin/bash
+vagrant up
+vagrant ssh
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install bash-completion
+
+https://docs.docker.com/engine/install/ubuntu/
+
+docker image
+
+sudo docker image pull fernando93d/hello
+sudo docker image ls
+
+docker container
+sudo docker container run fernando93d/hello
+
+sudo docker pull fernando93d/hello
+sudo docker run fernando93d/hello
+
+docker image rm $(docker image ls -a -q)
+docker container stop $(docker container ls -a -q)
+
+sudo docker container ls -a
+sudo docker container rm id 
+sudo docker container rm 6f8f185e9419
+
+sudo docker container rm name
+sudo docker container rm inspiring_feynman
+
+sudo docker container create fernando93d/hello
+sudo docker container start 0b36b36ea301
+sudo docker container stop 0b36b36ea301
+
+sudo docker image pull ubuntu
+sudo docker image pull ubuntu:20.04
+sudo docker image ls
+
+sudo docker container run ubuntu:latest
+sudo docker container run ubuntu:20.04
+sudo docker container ls -a
+
+sudo docker image pull nginx
+sudo docker container run nginx
+sudo docker container ls
+
+tmux
+# ctrl + b % dos páneles horizontales
+# ctrl + b flecha para mover entre páneles
+
+# correr interactivo en una pseudoterminal, sale con exit
+sudo docker container run -it ubuntu
