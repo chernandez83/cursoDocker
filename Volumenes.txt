@@ -1,0 +1,49 @@
+#!/bin/bash
+sudo docker volume create datavol
+sudo docker volume ls
+sudo docker inspect datavol
+sudo ls /var/lib/docker/volumes/
+
+# montar volumen en /app
+sudo docker container run -dit -v datavol:/app ubuntu
+sudo docker container ls
+
+sudo docker exec -it 5eca5040e60c bash
+cd /app
+touch data1.txt
+touch data2.txt
+
+sudo docker container rm -f 5eca5040e60c
+sudo docker inspect datavol
+sudo ls /var/lib/docker/volumes/datavol/_data # aquí están los archivos
+
+sudo docker container run -it -v datavol:/src ubuntu
+cd src
+ls
+
+tmux
+ctrl + b %
+sudo docker container run -it -v datavol:/app ubuntu
+sudo docker container run -it -v datavol:/src ubuntu
+# Los contenedores comparte el volumen
+
+mkdir src
+cd src
+touch  index.html
+pwd
+
+sudo docker container run -it -v /home/vagrant/src:/app ubuntu
+cd /app
+ls
+
+nano index.html
+<h1>Hola</h1>
+
+sudo docker container run -d -v /home/vagrant/src/index.html:/usr/share/nginx/html/index.html -p 80:80 ubuntu
+sudo docker container ls
+sudo docker exec -it 7e931a0c03ed bash
+
+sudo docker container stop $(sudo docker container ls -q)
+sudo docker container prune
+sudo docker container ls
+sudo docker image ls
