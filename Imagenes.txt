@@ -1,0 +1,74 @@
+#!/bin/bash
+nano Dockerfile
+#############################
+FROM imagen:tag
+RUN comandos
+#############################
+ARG DISTRO="ubuntu:22.04"
+FROM ${DISTRO}
+RUN useradd -ms /bin/bash robin
+RUN mkdir /app
+RUN cd /app && touch data.txt
+COPY ./src/index.html /app/src/com/hola.html
+COPY ./src /app/src_copy
+ADD  file.tar.gz /com/src
+ENV USER Batman
+USER robin
+RUN cd /home/robin && touch data.txt
+#############################
+# ADD descompacta
+# ENV crea variable de entorno
+# ARC argumentos
+sudo docker image build -t ubuntu-data .
+sudo docker image ls
+sudo docker container run -it ubuntu-data
+
+sudo docker image build -t ubuntu-data:v2 .
+sudo docker container run --rm -it ubuntu-data:v2
+
+sudo docker image build -t ubuntu-data:v3 .
+sudo docker container run --rm -it ubuntu-data:v3
+
+sudo docker image build -t ubuntu-data:v4 --build-arg DISTRO=ubuntu:19.04 .
+sudo docker container run --rm -it ubuntu-data:v4
+
+touch .dockerignore
+#############################
+./src/a
+./src/b
+./src/*.conf
+#############################
+
+sudo docker image build -t ubuntu-data:v5 .
+sudo docker container run -dit ubuntu-data:v5 # entra como robin
+sudo docker container exec -u 0 -it a2ff498c6b62 bash # entrar como root
+
+
+#############################
+FROM ubuntu
+CMD ["echo", "Hola"]
+#############################
+# CMD ejecuta comandos al instanciar el contenedor
+sudo docker image build -t cmd .
+sudo docker container run cmd echo "Hola, Batman" # reemplaza el cmd del Dockerfile 
+
+#############################
+FROM ubuntu
+ENTRYPOINT ["echo"]
+CMD ["Hola"]
+#############################
+# ENTRYPOINT no es reemplazable
+sudo docker image build -t cmd:v2 .
+sudo docker container run cmd:v2
+sudo docker container run cmd:v2 "Batman"
+
+
+# Pasar variable de entorno
+sudo docker container run --rm -it -e USER=$USER ubuntu
+echo $USER
+
+# Limpiar
+sudo docker container stop $(sudo docker container ls -q)
+sudo docker container prune
+sudo docker container ls
+sudo docker image ls

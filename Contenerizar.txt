@@ -1,0 +1,39 @@
+#!/bin/bash
+mkdir app
+cd app
+nano index.js
+#############################
+const express = require('express')
+const app = express()
+
+app.get('/', (req, res) => res.send('Hola mundo'))
+app.listen(3000, () => console.log('Hola'))
+#############################
+
+sudo docker pull node
+sudo docker run --rm -w /app -v /home/vagrant/app:/app -it node
+sudo docker run --rm -w /app -v /home/vagrant/app:/app -it node bash
+sudo docker run --rm -w /app -v /home/vagrant/app:/app -it node npm init -y # crea package.json
+sudo docker run --rm -w /app -v /home/vagrant/app:/app -it node npm install -S express
+sudo rm -r node_modules/
+
+nano Dockerfile
+#############################
+FROM node
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY index.js .
+CMD ["node","index.js"]
+#############################
+
+sudo docker image build -t webapp .
+sudo docker image ls
+sudo docker run -d -p 80:3000 webapp
+curl localhost
+
+# Para subir imagen
+sudo docker login
+sudo docker image ls
+sudo docker tag webapp usuario_docker/repositorio:tags
+sudo docker push usuario_docker/repositorio
