@@ -1,0 +1,67 @@
+#!/bin/bash
+sudo docker network ls
+sudo docker network inspect bridge
+
+sudo docker run -dit ubuntu
+sudo docker container ls
+sudo docker network inspect bridge
+sudo docker container inspect 2c3385fd19d1
+
+sudo docker run -dit --network bridge ubuntu
+sudo docker network inspect bridge
+
+sudo docker network disconnect bridge 8233ed32ef8b
+sudo docker network inspect bridge
+
+sudo docker network connect bridge 8233ed32ef8b
+sudo docker network inspect bridge
+
+sudo docker run -dit --network none ubuntu
+sudo docker run -dit --network host ubuntu
+
+sudo docker network inspect none
+sudo docker container exec -it nervous_sammet bash
+
+sudo docker network inspect host
+sudo docker container exec -it strange_yalow bash
+apt-get update
+apt-get install net-tools
+ifconfig
+
+
+nano Dockerfile
+###########################################################
+###########################################################
+FROM ubuntu
+RUN apt-get update && apt-get install net-tools iputils-ping -y
+###########################################################
+sudo docker image build -t ubuntu-tools .
+
+
+sudo docker network create br0
+sudo docker network ls
+sudo docker network inspect br0
+
+sudo docker container run -dit --network br0 --name host1 ubuntu-tools
+sudo docker container run -dit --network br0 --name host2 ubuntu-tools
+sudo docker container ls
+sudo docker container exec -it host1 bash
+sudo docker container exec -it host2 bash
+ping 172.18.0.2
+ping host1
+
+
+sudo docker network create --subnet 10.1.0.0/24 --gateway 10.1.0.1 br1
+sudo docker network ls
+sudo docker network inspect br1
+
+sudo docker container run -it --ip 10.1.0.10 --network br1 ubuntu-tools
+ifconfig
+
+
+
+# Limpiar
+sudo docker container stop $(sudo docker ps -q)
+sudo docker container prune
+sudo docker container ls
+sudo docker image ls
