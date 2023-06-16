@@ -1,0 +1,20 @@
+#!/bin/bash
+# Manager
+sudo docker swarm init --advertise-addr 10.0.0.102
+# Workers
+sudo docker swarm join --token TOKEN 10.0.0.102:2377
+
+# Manager
+sudo docker service create --replicas 2 --name redis redis:4
+sudo docker service inspect --pretty redis
+sudo docker service rm redis
+
+sudo docker service create --replicas 1 --name nginx nginx
+sudo docker service inspect --pretty nginx
+sudo docker service ps nginx
+sudo docker service update --publish-add 80:80 nginx
+sudo docker service ps nginx
+sudo docker ps
+curl localhost
+sudo docker service update --replicas 4 nginx
+sudo docker service ps nginx
