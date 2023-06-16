@@ -18,3 +18,4 @@ sudo docker ps
 curl localhost
 sudo docker service update --replicas 4 nginx
 sudo docker service ps nginx
+sudo docker service rm nginx
