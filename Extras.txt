@@ -1,0 +1,87 @@
+#!/bin/bash
+# Compartir dispositivo y reproducir mp3
+sudo docker run --rm -it -v /home:/home --device /dev/snd ubuntu bash
+apt-get update
+apt-get install moc moc-ffmpeg-plugin
+mocp
+
+# https://github.com/jessfraz/dockerfiles
+
+# Correr una app gráfica en docker
+# https://github.com/jessfraz/dockerfiles/tree/master/vscode
+
+
+# Docker API
+# https://docs.docker.com/engine/api/sdk/
+nano app.py
+###########################################################
+# extras
+import docker
+
+client = docker.DockerClient('unix://var/run/docker.sock')
+
+for container in client.containers.list():
+    print(container.name)
+    print(container.id)
+
+container = client.containers.run('nginx', detach=True, ports={'80/tcp': 80})
+print(container.id)
+###########################################################
+sudo docker pull python
+sudo docker run -dit -v $PWD:/home/app -v /var/run/docker.sock:/var/run/docker.sock python
+sudo docker ps
+sudo docker exec -it 02870fcc455a bash
+pip install docker
+cd /home/app
+python app.py
+exit
+
+
+# Reverse proxy
+# https://traefik.io/
+# https://doc.traefik.io/traefik/
+# https://hub.docker.com/_/traefik
+nano docker-compose.yaml
+###########################################################
+version: '3'
+
+services:
+    traefik:
+        image: traefik
+        ports:
+            - "8080:8080"
+            - "80:80"
+        volumes:
+            - ./traefik.toml:/etc/traefik/traefik.toml
+            - /var/run/docker.sock:/var/run/docker.sock
+    
+    nginx:
+        image: nginx
+        labels:
+            - "traefik.frontend.rule=Host:server.docker.local"
+            - "traefik.enable=true"
+        ports:
+            - "8081:80"
+    
+###########################################################
+
+nano traefik.toml
+###########################################################
+[api]
+
+[docker]
+  endpoint = 'unix://var/run/docker.sock'
+  domain = 'docker.local'
+  watch = true
+###########################################################
+
+sudo docker compose up -d
+sudo docker ps
+sudo docker compose down
+
+
+# Limpiar
+sudo docker container stop $(sudo docker ps -q)
+sudo docker container prune
+sudo docker container ls
+sudo docker image ls
